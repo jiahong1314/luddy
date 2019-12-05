@@ -1,0 +1,71 @@
+/*
+四、算法设计题
+1、对数学成绩，将不及格和及格的学生分成前后两部分，使表前面为不及格的
+学生，后面为及格的学生。不要求对这些元素按数学成绩排序.但要求尽量减少交
+换次数。
+2、表A按语文成绩非递减有序，表B按语文成绩非递增有序，将B表学生添加
+到A表，使A表依然按语文成绩非递减有序，B表不变。要求移动元素次数不超过
+两表长度之和。
+5、表A按语文成绩非递减有序，向表中添加一一个学生，并保持A表的有序性。
+6、对两个按语文成绩非递减有序的带头结点单链表A和B,将B表并入A表，而
+不改变其排序性，并将B表设置为空表。
+7、逆置单链表，即将结点顺序为: H->a1->a2- >..->an，
+，置换为:
+H->an- >...->a2 ->a1。要求，不交换元素值，通过修改结点指针完成。
+8、求带头结点的单循环链表中的结点个数，不包括头结点。
+9、统计二叉树中叶子结点数目V
+10、统计二叉树中只有一个子女(度为1)的结点数目
+
+*/
+//第一题
+typedef struct
+{
+  int mathscore;
+}Score;
+typedef struct
+{
+  Score data;
+  int length;
+}Student;
+void suanfa (Student *t)
+{
+   int low,high;
+   Score s;
+   for(low=0;high=t.length-1;low<high)
+   {
+      while(low<high&&t.data[low].m<60) low++;//寻找小于60的位置，即及格的人
+      while(low<high&&t.data[high].m>60) high--;//寻找大于60的位置，即不及格的人
+      if(low<high)//及格的人和不及格的交换位置，完成了将不及格和及格分为两部分
+      {
+        s=t.data[low];
+        t.data[low]=t.data[high];
+        t.data[high]=s;
+      }
+   }
+}
+//第二题
+void suanfa2 （Stuent *pa,Student *pb）
+{
+  int i,j,len;
+  i=pa->length-1;//记录表A中学生位置
+  j=0;//记录表B中学生位置
+  pa->length+=pb->length;//扩大A表
+  len=pa->length-1;
+  while(i>=0&&j<pb->length)
+  {
+     if(pa->data[i].mathscore>pb->data[j].mathscore)//判断A表中学生和B表中学生的成绩，如果A大，把A放到表尾
+       pa->data[len]=pa->data[i--];
+     else pa->data[len]=pb->data[j++];//B大，B放表尾
+     len--;
+  }
+  for(;j<pb->length;j++;lem--) pa->data[len]=pb->data[j];//剩余元素直接填满
+
+}
+
+
+
+
+
+
+
+}
