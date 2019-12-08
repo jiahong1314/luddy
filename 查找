@@ -1,0 +1,140 @@
+6.1相关概念
+1.查找表：是一种以集合为逻辑结构、以查找为核心运算的数据结构
+2.动态查找：除了查找操作外，还可以修改表。
+  静态查找：仅有查找操作
+3.关键码primary key 唯一确定一个数据元素
+  次关键码secondary key
+4.平均查找长度ASL
+5.数据元素类型的定义
+  typedef struct
+  {
+    keytype key;//关键码字段
+    ~~~          //其他信息
+  }datatype;
+6.2线性表查找
+1.顺序表上的查找
+（1）
+ int search1（datatype data[],keytype kx;int n)
+ {
+    int i;
+    while(i<=n&&data[i].key!=kx)
+    i++;
+    if(i>n) return 0;
+    else return 1;
+ }
+ (2)加监视哨后的顺序查找
+ int search2(datatype data[],keytype kx;int n)
+ {
+    data[0].key=kx;
+    i=n;
+    while(data[i]!=kx)
+    i--;
+    return i;
+ }
+ /*
+  data[0]起到监视哨的作用
+  while循环结束后：
+  i=0 查找失败，没有kx
+  i=1，2，3，。。。，n 查找成功返回i；
+  性能分析：
+    ASL=n+1/2
+    时间复杂度O(n)
+ */
+ 2.单链表上的查找
+   LSnode * LinkSearch(LSTabke LT,keytype kx)
+   {
+      LSnode *p;
+      p=LT->next;
+      while(p&&p->data.key!=kx)
+      p=p->next;
+      return p;
+    }
+    
+ 3.有序表中查找的四种方法
+ （1）折半查找
+   折半查找的思想：取中间元素作为比较对象，若等于中间元素，则查找成功返回下标位置；若小于中间元素则选择中间元素的左半区，重新选定中间元素作为比较对象
+   继续比较查找；若大于中间元素则选择中间元素右半区。
+   代码实现
+   int search(datatype data[],keytype kx;int n)
+   {
+      int mid;
+      int low=1;
+      int high=n;
+      while(low<=high)
+      {
+         mid=low+(high-low)/2;  //为什么不用（high+low）/2？
+         if(kx=mid) return mid;
+         else if(kx>mid) low=mid+1;
+         else high=mid-1;
+      }
+      return 0;
+   }
+   时间复杂度 log2(n)
+   (2)插值查找
+   平均性能最好的查找方法，但只适合关键码均匀分布的表，时间复杂度为log2（n）。
+   mid=low+(kx-data[low].key)/(data[high].key-data[low].key)*(high-low)
+   (3)斐波那契查找
+   mid的另一种划分方法
+   (4)分块查找
+   数据元素的关键字按块有序，块内无序，建立索引表对表进行分块
+   查找时，先确定元素属于哪一块（使用折半查找），确定后在块内由于无序使用顺序查找
+   6.3树表查找
+   1.二叉排序树
+   （1）规则：左<根<右 符合中序遍历得到的结果
+   （2）二叉排序树的查找
+   算法：
+   *树空，查找失败
+   *树不空，将结点值与查找的kx比较
+     相同，查找成功
+     大于，在左子树中继续查找
+     小于，在右子树中查找
+   代码：
+   迭代
+    p=t;//p指向根节点
+    while(p)
+    { 
+       if(kx=p->data.key) return p;
+       else if(kx<p->data.key) p=p->lchild;
+       else p=p->rchild;
+    }
+    return NULL;//查找失败
+    递归
+    if（t==NULL||t->data.key==kx)
+    return t;
+    else if (kx<t->data.key) search(t->lchild,kx);
+    else search(t->rchild,kx);
+    (3)二叉排序树中插入一个结点
+     typedef struct bistnode 
+     {
+       datatype data;
+       struct bistnode *lchild,*rchild;
+     }BISNode,*BISTree;
+     BISTree insertNode(BISTree t,keytype kx)
+     {
+        BISTNode *p,*f,*s;
+        p=t;
+        while(p)
+        {
+          if(kx=p->data.key)
+          {
+            printf("kx已存在”);
+            return t;
+          }
+          else
+          {
+             f=s;
+             if(kx>p->data.key) p=p->rchild;
+             else p=p->lchild;
+          }
+     }
+     s=(BISNode *)malloc(sizeof(BISNode));
+     s->data=kx;
+     s->lchild=NULL;
+     s->rchild=NULL;
+     if(!t) t=s;
+     else if(kx<f->data.key) f->lchild=s;
+     else f->rchild=s;
+     return t;
+    }
+       
+   
